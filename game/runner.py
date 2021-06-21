@@ -2,15 +2,17 @@ import pygame
 import pygame.freetype
 
 displayFlags = pygame.DOUBLEBUF | pygame.HWSURFACE
-fps = 120
+speed = 500
 
 def runGame():
     pygame.init()
 
     screen = pygame.display.set_mode(size = (640, 480), flags = displayFlags)
     clock = pygame.time.Clock()
+    fps = 30
     font = pygame.freetype.SysFont("", 32)
 
+    frameTime = 0.0
 
     running = True
 
@@ -26,17 +28,25 @@ def runGame():
             running = False
 
         if keystate[pygame.K_UP]:
-            y = y - 5
+            y = y - (speed * frameTime)
         
         if keystate[pygame.K_DOWN]:
-            y = y + 5
+            y = y + (speed * frameTime)
 
         if keystate[pygame.K_LEFT]:
-            x = x - 5
+            x = x - (speed * frameTime)
 
         if keystate[pygame.K_RIGHT]:
-            x = x + 5
+            x = x + (speed * frameTime)
 
+        if keystate[pygame.K_1]:
+            fps = 30
+        
+        if keystate[pygame.K_2]:
+            fps = 60
+
+        if keystate[pygame.K_3]:
+            fps = 120
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -44,4 +54,4 @@ def runGame():
 
         pygame.draw.rect(screen, pygame.Color(255, 255, 255), pygame.Rect((x, y), (128, 128)))
         pygame.display.flip()
-        clock.tick(fps)
+        frameTime = (clock.tick(fps) / 1000.0)
